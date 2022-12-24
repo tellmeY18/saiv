@@ -1,0 +1,45 @@
+#Bash Script to download YouTube Videos/Audio/Playlists
+
+#!/bin/sh
+
+# Print the menu
+echo "1. Download Video"
+echo "2. Download Audio"
+echo "3. Download Playlist"
+echo "4. Download Playlist Audio"
+echo "5. exit"
+
+# Read the user input
+read -p "Enter your choice: " choice
+
+# Check if the user input is 1
+# If yes, then download the video
+if [ $choice -eq 1 ]; then
+    read -p "Enter the URL: " url
+    yt-dlp $url
+fi
+
+# Check if the user input is 2
+# If yes, then download the audio
+if [ $choice -eq 2 ]; then
+    read -p "Enter the URL: " url
+    yt-dlp --extract-audio --audio-format mp3 --audio-quality 320 $url
+fi
+
+# Check if the user input is 3
+# If yes, then download the playlist
+if [ $choice -eq 3 ]; then
+	#Make a directory with the playlist name
+	mkdir -p ~/Videos/$(yt-dlp --get-title $url)
+    read -p "Enter the URL: " url
+    yt-dlp  -o '%(title)s.%(ext)s'  $url
+fi
+
+# Check if the user input is 4
+# If yes, then download the playlist audio
+if [ $choice -eq 4 ]; then
+	#Make a directory with the playlist name
+	mkdir -p ~/Music/$(yt-dlp --get-title $url)
+    read -p "Enter the URL: " url
+    yt-dlp --extract-audio --audio-format mp3 --audio-quality 320 -o '%(title)s.%(ext)s' $url
+fi
